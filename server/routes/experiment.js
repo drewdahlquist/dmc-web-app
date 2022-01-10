@@ -1,5 +1,4 @@
 const express = require("express");
-const { v4: uuidv4 } = require('uuid')
 
 // experimentRoutes is an instance of the express router.
 // We use it to define our routes.
@@ -21,6 +20,7 @@ experimentRoutes.route("/experiment").get(function (req, res) {
     .find({})
     .toArray(function (err, result) {
       if (err) throw err;
+      console.log("1 document retrieved");
       res.json(result);
     });
 });
@@ -33,6 +33,7 @@ experimentRoutes.route("/experiment/:id").get(function (req, res) {
     .collection("experiments")
     .findOne(myquery, function (err, result) {
       if (err) throw err;
+      console.log("1 document retrieved");
       res.json(result);
     });
 });
@@ -52,6 +53,7 @@ experimentRoutes.route("/experiment/add").post(function (req, response) {
   };
   db_connect.collection("experiments").insertOne(myobj, function (err, res) {
     if (err) throw err;
+    console.log("1 document added");
     response.json(res);
   });
 });
