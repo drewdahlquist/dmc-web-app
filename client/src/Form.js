@@ -66,31 +66,26 @@ export const ExperimentForm = () => (
                             .max(72, 'Must be at most 72 hours in between photos')
                             .required('Required'),
                         endDate: Yup
-                            .date()
-                            .min(new Date())
-                            .max(new Date(new Date().getTime() + (365 * 24 * 60 * 60 * 1000)))
+                            .date('Enter the date you want the experiment to end')
+                            .min(new Date(), 'Must be later than now')
+                            .max(new Date(new Date().getTime() + (365 * 24 * 60 * 60 * 1000)), 'Must not be later than a year from now')
                             .required('Required'),
                         confirmation: Yup
                             .boolean()
-                            .oneOf([true], 'Please read & confirm')
+                            .oneOf([true], 'Please confirm')
                             .required('Required'),
                     })}
                     onSubmit={(values, { setSubmitting, resetForm, setFieldValue }) => {
                         setSubmitting(true)
-                        // axios.post('', values, axiosConfig)
-                        //     .then((res) => {
-                        //         console.log(res.data)
-                        //         resetForm() // Only triggers when Raspbery Pi API is running
-                        //     })
-                        //     .catch((error) => {
-                        //         console.error(error)
-                        //     })
+                        axios.post('http://192.168.1.120:5000/experiment/add/', values, axiosConfig)
+                            .then((res) => {
+                                console.log(res.data)
+                                resetForm()
+                            })
+                            .catch((error) => {
+                                console.error(error)
+                            })
 
-                        alert(JSON.stringify(values, null, 2)) // TODO: REMOVE. testing
-                        resetForm({}) // TODO: REMOVE. Don't want this behavior, but here for testing since pi API won't always be running. RE: axios.post method above
-                        // TODO: Reset these fields. Won't happen for some reason...
-                        setFieldValue(values.endDate, [])
-                        setFieldValue(values.confirmation, false)
                         setSubmitting(false)
                     }}
                     enableReinitialize
@@ -101,6 +96,7 @@ export const ExperimentForm = () => (
                         touched,
                         handleChange,
                         handleSubmit,
+                        resetForm,
                         isSubmitting,
                         setFieldValue,
                         setValues,
@@ -152,11 +148,10 @@ export const ExperimentForm = () => (
                                 label='End Date'
                                 error={touched.endDate && errors.endDate}
                                 component={DateInput}
-                                value={values.endDate}
+                                format='mm/dd/yyyy'
+                                // value={values.endDate} // Field won't reset without this, but it makes entering the year act buggy. Need to find a fix
                                 onChange={handleChange}
-                            >
-                                <DateInput name='endDate' format='mm/dd/yyyy' />
-                            </FormField>
+                            />
 
                             <FormField
                                 name='confirmation'
@@ -164,11 +159,12 @@ export const ExperimentForm = () => (
                                 error={touched.confirmation && errors.confirmation}
                                 component={CheckBox}
                                 value={values.confirmation}
+                                checked={values.confirmation}
                                 onChange={handleChange}
                             />
 
                             <Box direction='row' gap='medium' flex align='center' justify='center'>
-                                <Button type='reset' secondary label='Reset' />
+                                <Button type='reset' secondary label='Reset' onClick={resetForm} />
                                 <Button type='submit' primary label='Submit' />
                             </Box>
                         </Form>)}
