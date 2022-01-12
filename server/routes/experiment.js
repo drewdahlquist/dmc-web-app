@@ -39,13 +39,13 @@ experimentRoutes.route("/experiment/:id").get(function (req, res) {
 experimentRoutes.route("/experiment/add").post(function (req, response) {
   let db_connect = dbo.getDb("dmc-db");
   let myobj = {
-    // uuid: uuidv4(), // will make decision about this later
     machine: req.body.machine,
     experimentName: req.body.experimentName,
     positions: req.body.positions,
     frequency: req.body.frequency,
     begDate: null,
     endDate: req.body.endDate,
+    status: true,
     confirmation: req.body.confirmation,
   };
   db_connect.collection("experiments").insertOne(myobj, function (err, res) {
@@ -67,6 +67,7 @@ experimentRoutes.route("/experiment/update/:id").post(function (req, response) {
       frequency: req.body.frequency,
       begDate: null,
       endDate: req.body.endDate,
+      status: true,
       confirmation: req.body.confirmation,
     },
   };
