@@ -19,5 +19,8 @@
   "homepage": "https://github.com/drewdahlquist/DMC-mern-app#readme",
   "dependencies": {
     "concurrently": "^7.0.0"
+  },
+  "devDependencies": {
+    "prettier": "2.5.1"
   }
 }

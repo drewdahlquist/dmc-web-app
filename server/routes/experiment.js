@@ -11,7 +11,6 @@ const dbo = require("../db/conn");
 // This will help convert the id from string to ObjectId for the _id.
 const ObjectId = require("mongodb").ObjectId;
 
-
 // This section will help you get a list of all the records.
 experimentRoutes.route("/experiment").get(function (req, res) {
   let db_connect = dbo.getDb("dmc-db");
@@ -29,13 +28,11 @@ experimentRoutes.route("/experiment").get(function (req, res) {
 experimentRoutes.route("/experiment/:id").get(function (req, res) {
   let db_connect = dbo.getDb("dmc-db");
   let myquery = { _id: ObjectId(req.params.id) };
-  db_connect
-    .collection("experiments")
-    .findOne(myquery, function (err, result) {
-      if (err) throw err;
-      console.log("1 document retrieved");
-      res.json(result);
-    });
+  db_connect.collection("experiments").findOne(myquery, function (err, result) {
+    if (err) throw err;
+    console.log("1 document retrieved");
+    res.json(result);
+  });
 });
 
 // This section will help you create a new record.
