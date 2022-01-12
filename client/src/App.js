@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import {
@@ -90,6 +90,10 @@ function App() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [experiments, setExperiments] = useState([]);
 
+  const wrapperSetExperiments = useCallback(val => {
+    setExperiments(val);
+  }, [setExperiments]);
+
   useEffect(() => {
     async function getExperiments() {
       const res = await fetch('http://192.168.1.120:5000/experiment/');
@@ -125,7 +129,7 @@ function App() {
 
               <Box flex align='center' justify='center'>
 
-                <ExperimentForm />
+                <ExperimentForm parentSetExperiments={wrapperSetExperiments} />
 
               </Box>
 

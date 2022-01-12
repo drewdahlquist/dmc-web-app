@@ -29,7 +29,7 @@ let axiosConfig = {
     }
 }
 
-export const ExperimentForm = () => (
+export const ExperimentForm = ({ parentSetExperiments }) => (
     <Grommet full theme={grommet}>
         <Box fill align='center' justify='center'>
             <Box width='medium'>
@@ -81,6 +81,14 @@ export const ExperimentForm = () => (
                             .then((res) => {
                                 console.log(res.data)
                                 resetForm()
+                                axios.get('http://192.168.1.120:5000/experiment/', axiosConfig)
+                                    .then((res) => {
+                                        console.log(res.data)
+                                        parentSetExperiments(res.data)
+                                    })
+                                    .catch((error) => {
+                                        console.error(error)
+                                    })
                             })
                             .catch((error) => {
                                 console.error(error)
