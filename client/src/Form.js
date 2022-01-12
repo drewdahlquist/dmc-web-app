@@ -84,7 +84,10 @@ export const ExperimentForm = ({ parentSetExperiments }) => (
                   .get("http://192.168.1.120:5000/experiment/", axiosConfig)
                   .then((res) => {
                     console.log(res.data);
-                    parentSetExperiments(res.data);
+                    const parsed = res.data.filter(function (el) {
+                      return el.status == true;
+                    });
+                    parentSetExperiments(parsed);
                   })
                   .catch((error) => {
                     console.error(error);

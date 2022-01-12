@@ -123,7 +123,10 @@ function App() {
       }
 
       const data = await res.json();
-      setExperiments(data);
+      const parsed = data.filter(function (el) {
+        return el.status == true;
+      });
+      setExperiments(parsed);
     }
 
     getExperiments();
