@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import {
@@ -52,83 +52,6 @@ const AppBar = (props) => (
   />
 );
 
-// TODO: fake data for now
-const mydata = [
-  {
-    machine: 'SRP',
-    experimentName: 'Lorem Ipsum',
-    positions: '8',
-    frequency: '6',
-    endDate: '01/31/2022',
-    confirmation: true,
-  },
-  {
-    machine: 'RootBot',
-    experimentName: 'Computer Science',
-    positions: '4',
-    frequency: '4',
-    endDate: '04/27/2022',
-    confirmation: true,
-  },
-  {
-    machine: 'SRP2',
-    experimentName: 'Mizzou',
-    positions: '6',
-    frequency: '2',
-    endDate: '02/22/2022',
-    confirmation: true,
-  },
-
-  {
-    machine: 'SRP',
-    experimentName: 'test',
-    positions: '8',
-    frequency: '4',
-    endDate: '04/27/2022',
-    confirmation: true,
-  },
-  {
-    machine: 'SRP',
-    experimentName: 'test',
-    positions: '8',
-    frequency: '4',
-    endDate: '04/27/2022',
-    confirmation: true,
-  },
-  {
-    machine: 'SRP',
-    experimentName: 'test',
-    positions: '8',
-    frequency: '4',
-    endDate: '04/27/2022',
-    confirmation: true,
-  },
-  {
-    machine: 'SRP',
-    experimentName: 'test',
-    positions: '8',
-    frequency: '4',
-    endDate: '04/27/2022',
-    confirmation: true,
-  },
-  {
-    machine: 'SRP',
-    experimentName: 'test',
-    positions: '8',
-    frequency: '4',
-    endDate: '04/27/2022',
-    confirmation: true,
-  },
-  {
-    machine: 'SRP',
-    experimentName: 'test',
-    positions: '8',
-    frequency: '4',
-    endDate: '04/27/2022',
-    confirmation: true,
-  },
-]
-
 const ExpCardHeader = ({ children, title, subTitle, size, ...rest }) => (
   <Box gap="small" align="center" direction="row" pad="small" {...rest}>
     {children}
@@ -149,7 +72,7 @@ const ExpCardBody = ({ positions, frequency, endDate, size, ...rest }) => (
   </Box>
 )
 
-const ExperimentCards = () => (mydata.map((value) => (
+const ExperimentCards = ({ data }) => (data.map((value) => (
   <Card style={{ height: 'small', width: '95%', minHeight: '222px' }} background="light-1" margin='xsmall'>
     <CardHeader pad={{ horizontal: "small" }}>
       <ExpCardHeader title={value.experimentName} subTitle={value.machine} />
@@ -165,6 +88,26 @@ const ExperimentCards = () => (mydata.map((value) => (
 
 function App() {
   const [showSidebar, setShowSidebar] = useState(false);
+  const [experiments, setExperiments] = useState([]);
+
+  useEffect(() => {
+    async function getExperiments() {
+      const res = await fetch('http://192.168.1.120:5000/experiment/');
+
+      // TODO: Remove. For dev only
+      if (!res.ok) {
+        alert('Error fetching data')
+        return;
+      }
+
+      const data = await res.json()
+      setExperiments(data)
+    }
+
+    getExperiments();
+
+    return;
+  }, [experiments.length])
 
   return (
     <Grommet theme={grommet} full>
@@ -198,7 +141,7 @@ function App() {
                     overflow={'scroll'}
                   >
                     <Heading level='3' margin='xsmall'>Experiments</Heading>
-                    <ExperimentCards></ExperimentCards>
+                    <ExperimentCards data={experiments}></ExperimentCards>
                   </Box>
                 </Collapsible>
               ) : (
