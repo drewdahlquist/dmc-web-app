@@ -114,7 +114,7 @@ function App() {
 
   useEffect(() => {
     async function getExperiments() {
-      const res = await fetch("http://192.168.1.120:5000/experiment/");
+      const res = await fetch("http://localhost:5000/experiment/");
 
       // TODO: Remove. For dev only
       if (!res.ok) {
@@ -124,7 +124,7 @@ function App() {
 
       const data = await res.json();
       const parsed = data.filter(function (el) {
-        return el.status == true;
+        return el.status === true;
       });
       setExperiments(parsed);
     }

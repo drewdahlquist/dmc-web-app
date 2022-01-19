@@ -73,7 +73,7 @@ export const ExperimentForm = ({ parentSetExperiments }) => (
             setSubmitting(true);
             axios
               .post(
-                "http://192.168.1.120:5000/experiment/add/",
+                "http://localhost:5000/experiment/add/",
                 values,
                 axiosConfig
               )
@@ -81,11 +81,11 @@ export const ExperimentForm = ({ parentSetExperiments }) => (
                 console.log(res.data);
                 resetForm();
                 axios
-                  .get("http://192.168.1.120:5000/experiment/", axiosConfig)
+                  .get("http://localhost:5000/experiment/", axiosConfig)
                   .then((res) => {
                     console.log(res.data);
                     const parsed = res.data.filter(function (el) {
-                      return el.status == true;
+                      return el.status === true;
                     });
                     parentSetExperiments(parsed);
                   })
